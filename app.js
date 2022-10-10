@@ -16,6 +16,7 @@ import connectToDatbase from './db/mongo_db_connector.js';
 // ROUTER IMPORTS
 import indexRouter from './routes/index.js';
 import homeRouter from './routes/home.js';
+import hashtagRouter from './routes/hashtags.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const PORT = process.env.PORT || '8000';
@@ -41,6 +42,7 @@ app.use(
 // ROUTERS
 app.use('/', indexRouter);
 app.use('/home', homeRouter);
+app.use('/hashtags', hashtagRouter);
 
 // PORT LISTENER
 app.listen(PORT, () => {

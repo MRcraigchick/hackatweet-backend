@@ -2,6 +2,8 @@ import express from 'express';
 import { validateReqBody } from '../lib/helpers.js';
 import Tweet from '../db/models/Tweet.js';
 import User from '../db/models/User.js';
+import HashTag from '../db/models/HashTag.js';
+import { findHashtags } from '../lib/helpers.js';
 const router = express.Router();
 
 router.post('/addtweet', async (req, res) => {
@@ -16,6 +18,12 @@ router.post('/addtweet', async (req, res) => {
     if (!user) return res.json({ result: false, error: 'Unauthorized token' });
     if (await Tweet.findOne({ tweet })) return res.json({ result: false, error: 'Tweet already exists' });
     await new Tweet({ user_id: user._id, tweet }).save();
+    const foundHashTags = findHashtags(tweet);
+    if (foundHashTags.length !== 0) {
+      for (let hashTag of foundHashTags) {
+        if (!(await HashTag.findOne({ tag: hashTag }))) await new HashTag({ tag: hashTag }).save();
+      }
+    }
     res.json({ result: true });
   } else {
     res.json({ result: false, error: 'Invalid data' });

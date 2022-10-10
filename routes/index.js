@@ -37,7 +37,7 @@ router.post('/signin', async (req, res) => {
     const user = await User.findOne({ username });
     if (!user || !bcrypt.compareSync(password, user.password))
       return res.json({ result: false, error: 'User not found' });
-    res.json({ result: true, username: user.username, token: user.token });
+    res.json({ result: true, firstname: user.firstname, username: user.username, token: user.token });
   } else {
     res.json({ result: false, error: 'Invalid user data' });
   }
